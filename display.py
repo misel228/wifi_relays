@@ -1,5 +1,7 @@
 from machine import I2C, Pin
 from ssd1306 import SSD1306_I2C
+from DummyOled import DummyOled
+
 import utime,time
 
 
@@ -10,9 +12,14 @@ class Display:
 
     ip_address = ''
     relay_status = [0,0,0,0]
+    use_dummy_oled = False
 
     ########  Function to init OLED ####################
-    def __init__(self):
+    def __init__(self, use_dummy = False):
+        if(use_dummy == True):
+            self.oled = DummyOled()
+            return
+
         print("init i2c")
         i2c = I2C(1,freq=200000,sda=Pin(6),scl=Pin(7))
         print(i2c)

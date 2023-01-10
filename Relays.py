@@ -8,6 +8,7 @@ class Relays:
     display = None
 
     def __init__(self, pins, display):
+        print(pins)
         self.pins = pins
         self.display = display
 
@@ -18,7 +19,7 @@ class Relays:
             machine.Pin(pins[3], machine.Pin.OUT)
         ]
 
-        for relay in range(0,4):
+        for relay in range(0,3):
             self.disable(relay)
 
 

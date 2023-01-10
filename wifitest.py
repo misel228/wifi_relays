@@ -10,10 +10,13 @@ from esp import esp
 from actions import Actions
 from application import Application
 
-display = Display()
+display = Display(conf.use_oled_dummy)
 
 esp = esp()
+print("init wifi")
 esp.initWifi(conf.ssid, conf.pwd)
+
+print("init Server")
 ip = esp.initServer(conf.Port)
 
 if(ip != None):

@@ -5,3 +5,5 @@ class conf:
     key = 'random number'
     Port = '8080'
     relay_pins = [2,3,15,13]
+    use_oled_dummy = True
+
