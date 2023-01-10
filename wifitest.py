@@ -9,6 +9,7 @@ from conf import conf
 from esp import esp
 from actions import Actions
 from application import Application
+from Authenticator import Authenticator
 
 display = Display(conf.use_oled_dummy)
 
@@ -28,11 +29,18 @@ if(ip != None):
     while True:
         Connection_ID,data=esp.ReceiveData()
         if(Connection_ID != None):
+            print(data)
             request = HttpRequest(data)
+            request.inspect()
             application = Application(relays)
-            action = application.match(request)
+            auth_required,action = application.match(request)
             print(action)
-            http_response = application.execute(action, request.params)
-            
-            esp.sendData(Connection_ID,http_response)
 
+            if(auth_required):
+                if(not Authenticator.authenticate(request)):
+                    http_response = application.AccessDenied()
+                    esp.sendData(Connection_ID,http_response)
+                    continue
+
+            http_response = application.execute(action, request.params)
+            esp.sendData(Connection_ID,http_response)
