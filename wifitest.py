@@ -11,9 +11,12 @@ from actions import Actions
 from application import Application
 from Authenticator import Authenticator
 
+print("init display")
 display = Display(conf.use_oled_dummy)
 
+print("uart to ESP")
 esp = esp()
+
 print("init wifi")
 esp.initWifi(conf.ssid, conf.pwd)
 
@@ -27,11 +30,9 @@ if(ip != None):
     relays = Relays(conf.relay_pins, display)
 
     while True:
-        Connection_ID,data=esp.ReceiveData()
+        Connection_ID,data=esp.ReceiveHttp()
         if(Connection_ID != None):
-            print(data)
             request = HttpRequest(data)
-            request.inspect()
             application = Application(relays)
             auth_required,action = application.match(request)
             print(action)
